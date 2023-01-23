@@ -62,7 +62,8 @@ router.put('/:id', (req, res) => {
     .then((updatedCategoryData) => {
       if (!updatedCategoryData) {
         res.status(400).json({
-          message: 'No matching categories, please enter a valid category id.',
+          message:
+            'No matching categories with that id. Please enter a valid category id.',
         });
         return;
       }
@@ -76,6 +77,22 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
+  Category.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((deletedCatagoryData) => {
+      if (!updatedCategoryData) {
+        res.status(400).json({
+          message:
+            'No matching categories with that id. Please enter a valid category id.',
+        });
+        return;
+      }
+      res.json(deletedCatagoryData);
+    })
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;
