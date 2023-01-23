@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     attributes: ['id', 'category_name'],
     include: Product,
   })
-    .then((allCategoryData) => res.json(allCategoryData))
+    .then((allCategoryData) => res.status(200).json(allCategoryData))
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
@@ -28,14 +28,14 @@ router.get('/:id', (req, res) => {
     attributes: ['id', 'category_name'],
     include: Product,
   })
-    .then((allCategoryData) => {
-      if (!allCategoryData) {
+    .then((singleCategoryData) => {
+      if (!singleCategoryData) {
         res.status(400).json({
           message: 'No matching categories, please enter a valid category id.',
         });
         return;
       }
-      res.json(allCategoryData);
+      res.status(200).json(singleCategoryData);
     })
 
     .catch((err) => {
@@ -47,7 +47,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   // create a new category
   Category.create(req.body)
-    .then((newCategoryData) => res.json(newCategoryData))
+    .then((newCategoryData) => res.status(200).json(newCategoryData))
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
@@ -69,7 +69,7 @@ router.put('/:id', (req, res) => {
         });
         return;
       }
-      res.json(updatedCategoryData);
+      res.status(200).json(updatedCategoryData);
     })
     .catch((err) => {
       console.log(err);
@@ -92,9 +92,12 @@ router.delete('/:id', (req, res) => {
         });
         return;
       }
-      res.json(deletedCatagoryData);
+      res.status(200).json(deletedCatagoryData);
     })
-    .catch((err) => res.json(err));
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
 });
 
 module.exports = router;
