@@ -31,7 +31,8 @@ router.get('/:id', (req, res) => {
     .then((singleCategoryData) => {
       if (!singleCategoryData) {
         res.status(400).json({
-          message: 'No matching categories, please enter a valid category id.',
+          message:
+            'No matching categories with that id. Please enter a valid category id.',
         });
         return;
       }

@@ -7,12 +7,38 @@ const { Tag, Product, ProductTag, Category } = require('../../models');
 router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
-  Tag.findAll({});
+  Tag.findAll({
+    include: Product,
+  })
+    .then((allTagData) => res.status(200).json(allTagData))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.get('/:id', (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
+  Tag.findOne({
+    where: {
+      id: req.params.id,
+    },
+    include: Product,
+  })
+    .then((singleTagData) => {
+      if (!singleTagData) {
+        res.status(400).json({
+          message: 'No matching tag with that id. Please enter a valid tag id.',
+        });
+        return;
+      }
+      res.status(200).json(singleTagData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
 });
 
 router.post('/', (req, res) => {
