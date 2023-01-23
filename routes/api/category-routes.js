@@ -8,9 +8,10 @@ router.get('/', (req, res) => {
   // be sure to include its associated Products
   Category.findAll({
     // attributes: ['id', 'category_name'],
-    include: [Product],
+    attributes: ['id', 'category_name'],
+    include: Product,
   })
-    .then((dbCategoryData) => res.json(dbCategoryData))
+    .then((allCategoryData) => res.json(allCategoryData))
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
@@ -24,16 +25,17 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id,
     },
-    include: [Product],
+    attributes: ['id', 'category_name'],
+    include: Product,
   })
-    .then((dbCategoryData) => {
-      if (!dbCategoryData) {
+    .then((allCategoryData) => {
+      if (!allCategoryData) {
         res.status(400).json({
           message: 'No matching categories, please enter a valid category id.',
         });
         return;
       }
-      res.json(dbCategoryData);
+      res.json(allCategoryData);
     })
 
     .catch((err) => {
