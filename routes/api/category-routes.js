@@ -26,7 +26,16 @@ router.get('/:id', (req, res) => {
     },
     include: [Product],
   })
-    .then((dbCategoryData) => res.json(dbCategoryData))
+    .then((dbCategoryData) => {
+      if (!dbCategoryData) {
+        res.status(400).json({
+          message: 'No matching categories, please enter a valid category id.',
+        });
+        return;
+      }
+      res.json(dbCategoryData);
+    })
+
     .catch((err) => {
       console.log(err);
       res.status(400).json(err);
@@ -45,6 +54,24 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  Category.update(req.body, {
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((updatedCategoryData) => {
+      if (!updatedCategoryData) {
+        res.status(400).json({
+          message: 'No matching categories, please enter a valid category id.',
+        });
+        return;
+      }
+      res.json(updatedCategoryData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
 });
 
 router.delete('/:id', (req, res) => {
