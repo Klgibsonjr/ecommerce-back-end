@@ -85,7 +85,7 @@ router.delete('/:id', (req, res) => {
     },
   })
     .then((deletedCatagoryData) => {
-      if (!updatedCategoryData) {
+      if (!deletedCatagoryData) {
         res.status(400).json({
           message:
             'No matching categories with that id. Please enter a valid category id.',
