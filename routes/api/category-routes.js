@@ -7,26 +7,40 @@ router.get('/', (req, res) => {
   // find all categories
   // be sure to include its associated Products
   Category.findAll({
-    attributes: ['id', 'category_name'],
-    include: [
-      {
-        model: Product,
-        attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
-      },
-    ],
+    // attributes: ['id', 'category_name'],
+    include: [Product],
   })
     .then((dbCategoryData) => res.json(dbCategoryData))
-    .catch((err) => console.log(err));
-  res.status(500).json(err);
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
+  Category.findOne({
+    where: {
+      id: req.params.id,
+    },
+    include: [Product],
+  })
+    .then((dbCategoryData) => res.json(dbCategoryData))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
 });
 
 router.post('/', (req, res) => {
   // create a new category
+  Category.create(req.body)
+    .then((newCategoryData) => res.json(newCategoryData))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.put('/:id', (req, res) => {
