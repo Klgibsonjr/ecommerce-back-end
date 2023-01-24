@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
   // be sure to include its associated Product data
   Tag.findAll({
     include: Product,
+    through: ProductTag,
   })
     .then((allTagData) => res.status(200).json(allTagData))
     .catch((err) => {
@@ -25,6 +26,7 @@ router.get('/:id', (req, res) => {
       id: req.params.id,
     },
     include: Product,
+    through: ProductTag,
   })
     .then((singleTagData) => {
       if (!singleTagData) {
@@ -43,6 +45,12 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new tag
+  Tag.create(req.body)
+    .then((newTagData) => res.status(200).json(newTagData))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.put('/:id', (req, res) => {
