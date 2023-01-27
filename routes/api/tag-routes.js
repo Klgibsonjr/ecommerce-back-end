@@ -59,13 +59,21 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id,
     },
-  }).then((updatedTagData) => {
-    if (!updatedTagData) {
-      res.status(400).json({
-        message: 'No matching tags with that id. Please enter a valid tag id.',
-      });
-    }
-  });
+  })
+    .then((updatedTagData) => {
+      if (!updatedTagData) {
+        res.status(400).json({
+          message:
+            'No matching tags with that id. Please enter a valid tag id.',
+        });
+        return;
+      }
+      res.status(200).json(updatedTagData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.delete('/:id', (req, res) => {
